@@ -54,3 +54,17 @@ def sanitize_punch(text: str) -> str:
 
     # добавить правильную подпись
     return body.rstrip() + f"\n\n{SIGNATURE_HTML}"
+
+
+def strip_signature(text: str) -> str:
+    """Удаляет финальную подпись ©oxxxymiron (если есть), чтобы не подсказывать в игре."""
+    if not text:
+        return text or ""
+    s = unicodedata.normalize("NFC", text).replace("\r", "\n")
+    s = re.sub(
+        r"\n+\s*(?:<i>)?\s*[©cC]\s*oxx?x?ymiron\s*(?:</i>)?\s*$",
+        "",
+        s,
+        flags=re.I,
+    )
+    return s.strip()
