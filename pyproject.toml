@@ -1,0 +1,12 @@
+[project]
+name = "oxxxybot"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "openai>=2.2.0",
+    "python-dotenv>=1.1.1",
+    "python-telegram-bot>=21,<22",
+    "telebot>=0.0.5",
+]
