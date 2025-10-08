@@ -44,6 +44,7 @@ uv run -m src.app.main
 ```
 
 ## Архитектура
+<pre>
 src/
 ├── app/
 │   ├── main.py          # Telegram-бот и InlineQueryHandler
@@ -52,3 +53,4 @@ src/
 │   └── text_utils.py    # Очистка, форматирование и подпись ©oxxxymiron
 └── core/
     └── config.py        # Настройки и ключи из .env
+</pre>
