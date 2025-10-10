@@ -193,6 +193,7 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         await q.answer("Добавлено в избранное" if ok else "Уже в избранном", show_alert=False)
         return
 
+    # Обработка угадывания
     if not data.startswith("guess:"):
         return
 
@@ -229,11 +230,21 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     scoreboard = _format_scoreboard(chat_id)
     ROUNDS.pop(key, None)
 
+    # 🔒 После первого ответа блокируем кнопки выбора,
+    # чтобы другие участники не могли нажать их повторно.
+    locked_keyboard = InlineKeyboardMarkup([
+        [
+            InlineKeyboardButton("Oxxxymiron", callback_data="disabled"),
+            InlineKeyboardButton("AI", callback_data="disabled"),
+        ],
+        [InlineKeyboardButton("Ещё раунд 🔁", callback_data="again")],
+    ])
+
     await q.edit_message_text(
         f"{who}: {verdict}\n"
         f"<b>Очки {escape_html(name)}:</b> {total}\n\n"
         f"{scoreboard}\n\n",
-        reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("Ещё раунд 🔁", callback_data="again")]]),
+        reply_markup=_make_after_keyboard(),  # ← только "Ещё раунд"
         parse_mode=constants.ParseMode.HTML,
         disable_web_page_preview=True,
     )
