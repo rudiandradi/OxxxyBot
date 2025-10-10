@@ -18,6 +18,10 @@ BOT_TOKEN = os.getenv("BOT_TOKEN")
 if not BOT_TOKEN:
     raise ValueError("BOT_TOKEN environment variable not set.")
 
+BOT_NAME = os.getenv("BOT_NAME")
+if not BOT_NAME:
+    raise ValueError("BOT_NAME environment variable not set.")
+
 
 GROQ_API_KEY = os.getenv("GROQ_API_KEY")
 if not GROQ_API_KEY:
