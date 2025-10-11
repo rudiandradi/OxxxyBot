@@ -169,6 +169,7 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if data == "again":
         text, label = await _new_round_text(context)
         ROUNDS[key] = {"answer": label, "text": text}
+        await q.answer()
         await q.edit_message_text(
             f"Настоящий ли панч?\n\n{text}",
             reply_markup=_make_game_keyboard(),
@@ -228,17 +229,8 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     name = NAMES.get((chat_id, user.id), user.first_name or "Игрок")
 
     scoreboard = _format_scoreboard(chat_id)
-    ROUNDS.pop(key, None)
 
-    # 🔒 После первого ответа блокируем кнопки выбора,
-    # чтобы другие участники не могли нажать их повторно.
-    locked_keyboard = InlineKeyboardMarkup([
-        [
-            InlineKeyboardButton("Oxxxymiron", callback_data="disabled"),
-            InlineKeyboardButton("AI", callback_data="disabled"),
-        ],
-        [InlineKeyboardButton("Ещё раунд 🔁", callback_data="again")],
-    ])
+    await q.answer()
 
     await q.edit_message_text(
         f"{who}: {verdict}\n"
@@ -248,6 +240,7 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         parse_mode=constants.ParseMode.HTML,
         disable_web_page_preview=True,
     )
+    ROUNDS.pop(key, None)
 
 # === FAVS / HELP ===
 async def favs_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
