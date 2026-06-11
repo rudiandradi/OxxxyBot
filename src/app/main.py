@@ -323,6 +323,13 @@ async def on_error(update: object, context: ContextTypes.DEFAULT_TYPE) -> None:
 def main():
     init_db()
 
+    # Фикс для версий Python 3.12+, где asyncio.get_event_loop() больше не создает цикл автоматически в основном потоке.
+    try:
+        asyncio.get_event_loop()
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
     app = ApplicationBuilder().token(BOT_TOKEN).concurrent_updates(True).build()
 
     app.add_handler(InlineQueryHandler(inlinequery))
