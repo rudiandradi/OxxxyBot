@@ -23,9 +23,9 @@ if not BOT_NAME:
     raise ValueError("BOT_NAME environment variable not set.")
 
 
-GROQ_API_KEY = os.getenv("GROQ_API_KEY")
-if not GROQ_API_KEY:
-    raise ValueError("GROQ_API_KEY environment variable not set.")
+MISTRAL_API_KEY = os.getenv("MISTRAL_API_KEY")
+if not MISTRAL_API_KEY:
+    raise ValueError("MISTRAL_API_KEY environment variable not set.")
 
 
 LLM_URL = os.getenv("LLM_URL")

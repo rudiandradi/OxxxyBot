@@ -25,7 +25,7 @@ from telegram.ext import (
 
 from src.core.config import BOT_TOKEN, BOT_NAME
 from src.app.phrases import reload_phrases, return_punch
-from src.app.groq_client import get_client, generate_punch, _inline_cache
+from src.app.llm_client import get_client, generate_punch, _inline_cache
 from src.app.text_utils import strip_signature
 from src.app.storage import (
     init_db, add_fav, list_favs, clear_favs,
@@ -154,7 +154,6 @@ async def game_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
 async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
-    await q.answer()
 
     chat_id = q.message.chat_id
     message_id = q.message.message_id
@@ -179,6 +178,7 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
 
     if data == "quote":
+        await q.answer()
         punch = round_data["text"]
         await context.bot.send_message(
             chat_id=chat_id,
@@ -196,9 +196,11 @@ async def game_callback(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
     # Обработка угадывания
     if not data.startswith("guess:"):
+        await q.answer()
         return
 
     if not round_data:
+        await q.answer()
         await q.edit_message_text(
             "Раунд устарел 😔 Нажми «Ещё раунд 🔁», чтобы продолжить.",
             parse_mode=constants.ParseMode.HTML,
